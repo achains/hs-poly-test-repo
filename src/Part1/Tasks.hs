@@ -12,21 +12,39 @@ myCos = notImplementedYet
 
 -- наибольший общий делитель двух чисел
 myGCD :: Integer -> Integer -> Integer
-myGCD = notImplementedYet
+myGCD x y = myGCD' (abs x) (abs y)
+    where 
+    myGCD' x 0 = x 
+    myGCD' x y = myGCD' y (x `mod` y)
 
 -- является ли дата корректной с учётом количества дней в месяце и
 -- вискокосных годов?
+isLeapYear :: Integer -> Bool 
+isLeapYear yy = ((yy `mod` 4 == 0) && (yy `mod` 100 /= 0)) || (yy `mod` 400 == 0)
+
 isDateCorrect :: Integer -> Integer -> Integer -> Bool
-isDateCorrect = notImplementedYet
+isDateCorrect dd mm yy 
+    | mm < 1 || mm > 12 = False 
+    | dd < 1 || dd > 31 = False 
+    | isLeapYear yy && mm == 2 = dd <= 29 
+    | mm == 2 = dd <= 28
+    | mm == 3 || mm == 6 || mm == 9 || mm == 11 = dd <= 31 
+    | otherwise = dd <= 30
 
 -- возведение числа в степень, duh
 -- готовые функции и плавающую арифметику использовать нельзя
 myPow :: Integer -> Integer -> Integer
-myPow = notImplementedYet
+myPow n k = if k == 0 then 1 else n * myPow n (k-1)
 
 -- является ли данное число простым?
+isPrime' n k
+    | k == n = True
+    | otherwise = if (n `mod` k == 0) then False else isPrime' n (k + 1)  
+
 isPrime :: Integer -> Bool
-isPrime = notImplementedYet
+isPrime n 
+    | n < 2 = False
+    | otherwise = isPrime' n 2
 
 type Point2D = (Double, Double)
 
