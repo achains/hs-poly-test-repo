@@ -16,15 +16,26 @@ rlistToList lst =
 
 -- Реализуйте обратное преобразование
 listToRlist :: [a] -> ReverseList a
-listToRlist = notImplementedYet
+listToRlist = 
+    let helper x acc = x :< acc 
+    in foldl helper REmpty
 
 -- Реализуйте все представленные ниже классы (см. тесты)
-instance Show (ReverseList a) where
-    showsPrec = notImplementedYet
-    show = notImplementedYet
-instance Eq (ReverseList a) where
-    (==) = notImplementedYet
-    (/=) = notImplementedYet
+instance Show a => Show (ReverseList a) where
+    showsPrec _ lst = 
+        let helper REmpty = showString ""
+            helper (REmpty :< x) = shows x 
+            helper (xs :< x) = helper xs . showString "," . shows x 
+        in showString "[" . helper lst . showString "]" 
+
+    show lst = showsPrec 0 lst ""
+
+instance Eq a => Eq (ReverseList a) where
+    (==) REmpty REmpty = True
+    (==) (lx :< lxs) (rx :< rxs) = lx == rx && lxs == rxs
+    (==) _ _ = False
+    (/=) lhs rhs = not (lhs == rhs)
+ 
 instance Semigroup (ReverseList a) where
 instance Monoid (ReverseList a) where
 instance Functor ReverseList where
