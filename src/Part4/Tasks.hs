@@ -37,7 +37,21 @@ instance Eq a => Eq (ReverseList a) where
     (/=) lhs rhs = not (lhs == rhs)
  
 instance Semigroup (ReverseList a) where
+    (<>) lhs REmpty = lhs 
+    (<>) lhs (xs :< x) = (lhs <> xs) :< x
+
 instance Monoid (ReverseList a) where
+    mempty = REmpty
+
 instance Functor ReverseList where
+    fmap f REmpty = REmpty
+    fmap f (xs :< x) = (fmap f xs) :< f x
+
 instance Applicative ReverseList where
+    pure x = REmpty :< x
+    (<*>) REmpty _ = REmpty
+    (fs :< f) <*> xs = (fs <*> xs) <> (fmap f xs)
+
 instance Monad ReverseList where
+    (>>=) REmpty _ = REmpty
+    (>>=) (xs :< x) f = (xs >>= f) <> f x
